@@ -36,7 +36,7 @@ body{margin:0;color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Rob
 .note{color:var(--mu);font-size:12px;margin-top:16px;text-align:center}
 </style></head><body><div class="w">
 <div class="logo">My <b>Workouts</b></div><div class="sub">Train hard · Stay consistent</div>
-<div class="seg"><button id="n1" class="on">Body Parts</button><button id="n2">☀️ Morning 12 min</button></div>
+<div class="seg"><button id="n1" class="on">Body Parts</button><button id="n2">☀️ Morning</button><button id="n3">🧘 Sunday Yoga</button></div>
 <div id="app"></div>
 <p class="note">Tap ▶ Video for a form tutorial on YouTube. Warm up 5 min first.</p>
 </div>
@@ -84,16 +84,18 @@ Legs:leg};
 function fig(k){
 const base=`<circle cx="50" cy="14" r="8" fill="${G}"/><rect x="46" y="21" width="8" height="8" fill="${G}"/><path d="M30 29Q50 24 70 29L66 72Q50 78 34 72Z" fill="${G}"/>`+A.map(a=>L(...a,G)).join("");
 return `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${base}${HL[k]}</svg>`}
-const q=n=>"https://www.youtube.com/results?search_query="+encodeURIComponent(n+" exercise proper form");
+const q=(n,x)=>"https://www.youtube.com/results?search_query="+encodeURIComponent(n+(x||" exercise proper form"));
 const app=document.getElementById("app");
-const list=a=>a.map((s,i)=>{const[n,r,t]=s.split("|");return `<div class="ex"><div class="no">${i+1}</div><div class="n"><b>${n}</b><em>${r}</em><small>${t}</small></div><a class="v" target="_blank" rel="noopener" href="${q(n)}">▶ Video</a></div>`}).join("");
+const list=(a,x)=>a.map((s,i)=>{const[n,r,t]=s.split("|");return `<div class="ex"><div class="no">${i+1}</div><div class="n"><b>${n}</b><em>${r}</em><small>${t}</small></div><a class="v" target="_blank" rel="noopener" href="${q(n,x)}">▶ Video</a></div>`}).join("");
 function home(){app.innerHTML=`<div class="grid">${Object.keys(P).map(k=>`<button class="part" data-k="${k}">${fig(k)}<b>${k}</b><i>${P[k][1].length+P[k][2].length} exercises</i></button>`).join("")}</div>`;
 app.querySelectorAll(".part").forEach(b=>b.onclick=()=>part(b.dataset.k,0))}
 function part(k,t){app.innerHTML=`<button class="back">← All body parts</button><div class="hd">${fig(k)}<div><h2>${k}</h2><p>${P[k][1].length} gym · ${P[k][2].length} home</p></div></div><div class="seg"><button class="${t?"":"on"}">🏋️ Gym</button><button class="${t?"on":""}">🏠 Home</button></div>${list(P[k][t+1])}`;
 const b=app.querySelectorAll("button");b[0].onclick=home;b[1].onclick=()=>part(k,0);b[2].onclick=()=>part(k,1)}
 function morning(k){const ks=Object.keys(M);k=k||ks[0];app.innerHTML=`<div class="hd"><div class="big">${k.slice(0,2)}</div><div><h2>Morning</h2><p>10–15 min · no equipment</p></div></div><div class="seg">${ks.map(x=>`<button class="${x==k?"on":""}">${x.replace(/ \(.*/,"")}</button>`).join("")}</div>${list(M[k])}`;
 app.querySelectorAll(".seg button").forEach((b,i)=>b.onclick=()=>morning(ks[i]))}
-const n1=document.getElementById("n1"),n2=document.getElementById("n2");
-n1.onclick=()=>{n1.className="on";n2.className="";home()};n2.onclick=()=>{n2.className="on";n1.className="";morning()};
+const Y=["Bhujangasana (Cobra Pose)|Hold 20-30s ×3|Lie on your belly, palms under shoulders, lift chest, keep shoulders away from ears","Dhanurasana (Bow Pose)|Hold 15-20s ×3|Hold ankles, kick feet back to lift chest and thighs, breathe steadily","Chakrasana (Wheel Pose)|Hold 10-15s ×3|Warm up first. Palms by ears, press up evenly. Skip if you have wrist, back or shoulder pain; try Bridge Pose instead","Balasana (Child's Pose)|Hold 1-2 min|Knees wide, hips to heels, forehead down, rest and breathe slowly"];
+function yoga(){app.innerHTML=`<div class="hd"><div class="big">🧘</div><div><h2>Sunday Yoga</h2><p>4 asanas · about 15 min · empty stomach</p></div></div>${list(Y," yoga asana tutorial")}<p class="note">Move slowly and never force a stretch. Stop if you feel sharp pain.</p>`}
+const T=[["n1",home],["n2",morning],["n3",yoga]];
+T.forEach(([id,f])=>{document.getElementById(id).onclick=()=>{T.forEach(([i])=>document.getElementById(i).className=i==id?"on":"");f()}});
 home();
 </script></body></html>
