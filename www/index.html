@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>My Workouts</title>
+<style>
+:root{color-scheme:dark;--bg:#050505;--card:#121214;--bd:#26262a;--tx:#f4f4f5;--mu:#8e8e96;--r:#ff2434;--r2:#b3000f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg) radial-gradient(ellipse at 50% -10%,#4a0710 0,transparent 55%) no-repeat;min-height:100vh}
+.w{max-width:720px;margin:0 auto;padding:18px 16px 40px}
+.logo{font-size:30px;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin:4px 0 2px}
+.logo b{color:var(--r);text-shadow:0 0 18px #ff243488}
+.sub{color:var(--mu);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.seg{display:flex;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:4px;gap:4px;margin-bottom:16px}
+.seg button{flex:1;border:0;background:none;color:var(--mu);padding:11px 6px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer}
+.seg button.on{background:linear-gradient(135deg,var(--r),var(--r2));color:#fff;box-shadow:0 4px 16px #ff24344d}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.part{position:relative;overflow:hidden;background:linear-gradient(180deg,#1a1a1d,#0c0c0e);border:1px solid var(--bd);border-radius:18px;padding:12px 8px 14px;color:var(--tx);cursor:pointer;text-align:center}
+.part:active{border-color:var(--r)}
+.part:last-child:nth-child(odd){grid-column:span 2}
+.part svg{height:130px;width:auto;display:block;margin:0 auto 6px;filter:drop-shadow(0 0 8px #ff243455)}
+.part b{display:block;font-size:17px;letter-spacing:1.5px;text-transform:uppercase}
+.part i{display:block;font-style:normal;color:var(--mu);font-size:12px;margin-top:2px}
+.back{background:none;border:0;color:var(--r);font-weight:700;font-size:14px;cursor:pointer;padding:0 0 10px}
+.hd{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#2a0409,#0c0c0e 70%);border:1px solid var(--bd);border-radius:20px;padding:14px 18px;margin-bottom:14px}
+.hd svg{height:120px;width:auto;filter:drop-shadow(0 0 10px #ff243466)}
+.hd h2{margin:0;font-size:30px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+.hd p{margin:4px 0 0;color:var(--mu);font-size:13px}
+.big{font-size:56px;line-height:1}
+.ex{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--bd);border-left:3px solid var(--r);border-radius:14px;padding:12px;margin-bottom:10px}
+.no{font-size:20px;font-weight:900;color:var(--r);width:30px;text-align:center}
+.n{flex:1;min-width:0}.n b{display:block;font-size:16px}
+.n em{display:inline-block;font-style:normal;background:#ff24342b;color:#ff6b75;border-radius:20px;padding:2px 9px;font-size:12px;font-weight:700;margin:5px 0 3px}
+.n small{display:block;color:var(--mu);line-height:1.35}
+.v{background:linear-gradient(135deg,var(--r),var(--r2));color:#fff;text-decoration:none;border-radius:50px;padding:10px 14px;font-size:13px;font-weight:800;white-space:nowrap;box-shadow:0 4px 14px #ff24343d}
+.note{color:var(--mu);font-size:12px;margin-top:16px;text-align:center}
+</style></head><body><div class="w">
+<div class="logo">My <b>Workouts</b></div><div class="sub">Train hard · Stay consistent</div>
+<div class="seg"><button id="n1" class="on">Body Parts</button><button id="n2">☀️ Morning</button><button id="n3">🧘 Sunday Yoga</button></div>
+<div id="app"></div>
+<p class="note">Tap ▶ Video for a form tutorial on YouTube. Warm up 5 min first.</p>
+</div>
+<script>
+const P={
+Chest:["💥",
+["Barbell Bench Press|4×8-10|Shoulder blades pinched, bar to mid-chest","Incline Dumbbell Press|3×10|30° bench, press up and slightly in","Decline Bench Press|3×10|Controlled lowering, lower chest focus","Cable Crossover|3×12|Slight elbow bend, squeeze at the centre","Pec Deck Fly|3×12|Chest up, slow stretch","Chest Dips|3×8-10|Lean forward, elbows flared a little","Dumbbell Pullover|3×12|Deep stretch, ribs down","Machine Chest Press|3×10|Full range, no lockout"],
+["Push-ups|4×max|Body straight, chest touches floor","Wide Push-ups|3×12|Hands wider than shoulders","Incline Push-ups|3×15|Hands on sofa/bench, great for beginners","Decline Push-ups|3×10|Feet on chair for upper chest","Diamond Push-ups|3×10|Hands close, also hits triceps","Archer Push-ups|3×6/side|Shift weight to one arm"]],
+Triceps:["🔱",
+["Triceps Pushdown (Rope)|4×12|Elbows pinned to sides, spread rope at bottom","Skull Crushers|3×10|Lower to forehead, elbows in","Overhead Dumbbell Extension|3×12|Keep elbows close to head","Close-Grip Bench Press|3×8|Hands shoulder-width, elbows tucked","Cable Overhead Extension|3×12|Big stretch, full lockout","Weighted Dips|3×8-10|Stay upright for triceps","Single-Arm Reverse Pushdown|3×12|Palm up, slow return"],
+["Bench/Chair Dips|4×12|Back close to bench, elbows back","Diamond Push-ups|3×10|Hands form a diamond","Close-Grip Push-ups|3×12|Elbows brushing ribs","Bodyweight Skull Crusher|3×10|Hands on a table edge, bend elbows","Pike Push-ups|3×8|Hips high, head between arms","Triceps Kickback (bottle)|3×15|Upper arm parallel to floor"]],
+Back:["🦅",
+["Deadlift|4×5-6|Neutral spine, push the floor away","Lat Pulldown|4×10|Pull to upper chest, lead with elbows","Barbell Bent-Over Row|4×8|Torso ~45°, bar to lower ribs","Seated Cable Row|3×12|Squeeze shoulder blades","Pull-ups|3×max|Full hang, chin over bar","Single-Arm Dumbbell Row|3×10|Pull elbow to hip","T-Bar Row|3×10|Chest supported if possible","Straight-Arm Pulldown|3×12|Arms nearly straight, feel lats"],
+["Superman Hold|3×12|Lift arms and legs, 2s squeeze","Reverse Snow Angels|3×12|Lie face down, sweep arms","Towel Door Row|3×12|Hold towel on door, lean back and pull","Backpack Bent-Over Row|4×12|Heavy bag, flat back","Inverted Table Row|3×8-10|Under a sturdy table, pull chest up","Bird Dog|3×10/side|Slow, hips square"]],
+Biceps:["🦾",
+["Barbell Curl|4×10|No swinging, elbows fixed","Incline Dumbbell Curl|3×10|Full stretch at bottom","Hammer Curl|3×12|Neutral grip, builds forearms too","Preacher Curl|3×10|Slow lowering","Concentration Curl|3×12|Elbow on inner thigh","Cable Curl|3×12|Constant tension","Spider Curl|3×12|Chest on incline bench, strict form"],
+["Backpack Curl|4×12|Fill bag with books, slow reps","Towel Isometric Curl|3×20s|Pull up on towel while pressing down with foot","Chin-ups (door bar)|3×max|Palms facing you","Water-Bottle Hammer Curl|3×15|Neutral grip","Resistance Band Curl|3×15|Stand on band, squeeze at top","Slow Negative Curl|3×8|3-4 sec lowering"]],
+Shoulders:["🏔️",
+["Overhead Barbell Press|4×8|Core tight, press straight up","Dumbbell Shoulder Press|3×10|Elbows slightly forward","Lateral Raise|4×12-15|Lead with elbows, stop at shoulder height","Front Raise|3×12|Controlled, no swing","Reverse Pec Deck|3×12|Rear delts, chest on pad","Face Pull|3×15|Pull to forehead, elbows high","Arnold Press|3×10|Rotate palms as you press","Barbell Shrugs|3×12|Straight up, no rolling"],
+["Pike Push-ups|4×8-10|Hips high, head to floor","Backpack Overhead Press|3×12|Press a loaded bag","Water-Bottle Lateral Raise|3×15|Slow and light","Plank to Down Dog|3×10|Pushes shoulders to move fully","Wall Handstand Hold|3×20s|Belly to wall, if comfortable","Prone Y-T-W Raise|3×8 each|Lie face down, trace letters"]],
+Legs:["🦵",
+["Barbell Back Squat|4×8|Chest up, hips below knees","Leg Press|4×12|Don't lock knees","Romanian Deadlift|3×10|Hips back, flat back","Walking Lunges|3×12/leg|Long stride, upright torso","Leg Extension|3×12|Pause at top","Lying Leg Curl|3×12|Slow lowering","Hip Thrust|3×10|Chin tucked, squeeze glutes","Standing Calf Raise|4×15|Full stretch and rise"],
+["Bodyweight Squats|4×20|Heels flat, knees track toes","Reverse Lunges|3×12/leg|Step back, knee kisses floor","Bulgarian Split Squat|3×10/leg|Rear foot on a chair","Glute Bridge|3×15|Squeeze 2s at top","Wall Sit|3×45s|Thighs parallel to floor","Jump Squats|3×12|Land softly","Single-Leg Calf Raise|3×15|Hold a wall for balance"]],
+Abs:["🔥",
+["Cable Crunch|4×15|Round the spine, hips still","Hanging Leg Raise|3×12|Avoid swinging","Ab Wheel Rollout|3×10|Hips tucked, go as far as you control","Decline Sit-up|3×15|Slow and controlled","Russian Twist (weighted)|3×20|Feet up, rotate ribs","Machine Crunch|3×15|Exhale on the squeeze","Weighted Plank|3×45s|Ribs down, glutes tight"],
+["Crunches|4×20|Chin off chest, lift shoulder blades","Plank|3×45-60s|Straight line head to heels","Bicycle Crunch|3×20|Slow, elbow to opposite knee","Lying Leg Raise|3×15|Lower back stays pressed","Mountain Climbers|3×30s|Fast knees, hips low","Flutter Kicks|3×30s|Small fast kicks","Dead Bug|3×10/side|Opposite arm and leg"]]
+};
+const M={
+"🔥 Belly Fat Burn (Tue · Thu · Sat)": [
+"Jumping Jacks|60 sec|Warm-up, stay light on feet",
+"High Knees|40 sec on, 20 off|Drive knees to hip height",
+"Mountain Climbers|40 sec on, 20 off|Fast, hips low",
+"Burpees|40 sec on, 20 off|Step back if needed",
+"Bicycle Crunch|40 sec on, 20 off|Slow rotation",
+"Skater Jumps|40 sec on, 20 off|Side to side, soft landing",
+"Plank Jacks|40 sec on, 20 off|Core tight",
+"Flutter Kicks|40 sec|Lower back flat",
+"Vacuum Pose Breathing|5 slow breaths|Exhale fully, pull belly in",
+"Skipping Rope|250 jumps (~5 min)|Light and steady, short breather if needed",
+"Legs Up the Wall (Night)|5-10 min · 11-11:30 pm|Lie with hips near the wall, legs lifted up the wall at the corner, breathe slowly"
+],
+"💪 Morning Strength (Mon · Wed · Fri)": [
+"Pull-ups (Set 1 of 3)|5 reps|Before the other exercises. Full hang, chin over bar",
+"Push-ups|3×10-15|Chest to floor",
+"Bodyweight Squats|3×20|Heels down",
+"Reverse Lunges|2×10/leg|Upright torso",
+"Glute Bridge|3×15|Squeeze at top",
+"Plank|3×40s|Straight line",
+"Pull-ups (Set 2 of 3)|5 reps|Middle set",
+"Superman Hold|3×12|2s squeeze",
+"Pike Push-ups|2×8|Shoulders",
+"Skipping Rope|250 jumps (~5 min)|Before the last pull-up set. Light and steady, short breather if needed",
+"Pull-ups (Set 3 of 3)|5 reps|Last set, right after skipping",
+"Legs Up the Wall (Night)|5-10 min · 11-11:30 pm|Lie with hips near the wall, legs lifted up the wall at the corner, breathe slowly"
+]
+};
 
+const R="#ff2434",G="#2a2a2f";
+const L=(a,b,c,d,w,col)=>`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+const A=[[27,32,20,58,9],[20,58,17,82,7],[73,32,80,58,9],[80,58,83,82,7],[42,76,40,108,14],[58,76,60,108,14],[40,108,40,133,10],[60,108,60,133,10]];
+const arm=[L(26,37,22,53,7,R),L(74,37,78,53,7,R)].join("");
+const leg=A.slice(4).map(a=>L(...a,R)).join("");
+const HL={
+Chest:'<ellipse cx="42" cy="38" rx="9" ry="7" fill="#ff2434"/><ellipse cx="58" cy="38" rx="9" ry="7" fill="#ff2434"/>',
+Shoulders:'<circle cx="29" cy="31" r="6.5" fill="#ff2434"/><circle cx="71" cy="31" r="6.5" fill="#ff2434"/>',
+Biceps:arm,Triceps:arm,
+Abs:'<rect x="43" y="47" width="14" height="24" rx="4" fill="#ff2434"/><path d="M43 55h14M43 63h14M50 47v24" stroke="#121214" stroke-width="1.2"/>',
+Back:'<path d="M35 29L65 29L60 52L56 71L44 71L40 52Z" fill="#ff2434"/><path d="M50 29v42" stroke="#121214" stroke-width="1.2"/>',
+Legs:leg};
+function fig(k){
+const base=`<circle cx="50" cy="14" r="8" fill="${G}"/><rect x="46" y="21" width="8" height="8" fill="${G}"/><path d="M30 29Q50 24 70 29L66 72Q50 78 34 72Z" fill="${G}"/>`+A.map(a=>L(...a,G)).join("");
+return `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">${base}${HL[k]}</svg>`}
+const q=(n,x)=>"https://www.youtube.com/results?search_query="+encodeURIComponent(n+(x||" exercise proper form"));
+const app=document.getElementById("app");
+const list=(a,x)=>a.map((s,i)=>{const[n,r,t]=s.split("|");return `<div class="ex"><div class="no">${i+1}</div><div class="n"><b>${n}</b><em>${r}</em><small>${t}</small></div><a class="v" target="_blank" rel="noopener" href="${q(n,x)}">▶ Video</a></div>`}).join("");
+function home(){app.innerHTML=`<div class="grid">${Object.keys(P).map(k=>`<button class="part" data-k="${k}">${fig(k)}<b>${k}</b><i>${P[k][1].length+P[k][2].length} exercises</i></button>`).join("")}</div>`;
+app.querySelectorAll(".part").forEach(b=>b.onclick=()=>part(b.dataset.k,0))}
+function part(k,t){app.innerHTML=`<button class="back">← All body parts</button><div class="hd">${fig(k)}<div><h2>${k}</h2><p>${P[k][1].length} gym · ${P[k][2].length} home</p></div></div><div class="seg"><button class="${t?"":"on"}">🏋️ Gym</button><button class="${t?"on":""}">🏠 Home</button></div>${list(P[k][t+1])}`;
+const b=app.querySelectorAll("button");b[0].onclick=home;b[1].onclick=()=>part(k,0);b[2].onclick=()=>part(k,1)}
+function morning(k){const ks=Object.keys(M);k=k||ks[0];const m=k.match(/^(\S+) (.*?) \((.*)\)$/);app.innerHTML=`<div class="hd"><div class="big">${m[1]}</div><div><h2>${m[2]}</h2><p>${m[3]}</p></div></div><div class="seg">${ks.map(x=>`<button class="${x==k?"on":""}">${x.replace(/ \(.*/,"")}</button>`).join("")}</div>${list(M[k])}`;
+app.querySelectorAll(".seg button").forEach((b,i)=>b.onclick=()=>morning(ks[i]))}
+const Y=["Bhujangasana (Cobra Pose)|Hold 20-30s ×3|Lie on your belly, palms under shoulders, lift chest, keep shoulders away from ears","Dhanurasana (Bow Pose)|Hold 15-20s ×3|Hold ankles, kick feet back to lift chest and thighs, breathe steadily","Chakrasana (Wheel Pose)|Hold 10-15s ×3|Warm up first. Palms by ears, press up evenly. Skip if you have wrist, back or shoulder pain; try Bridge Pose instead","Balasana (Child's Pose)|Hold 1-2 min|Knees wide, hips to heels, forehead down, rest and breathe slowly"];
+function yoga(){app.innerHTML=`<div class="hd"><div class="big">🧘</div><div><h2>Sunday Yoga</h2><p>4 asanas · about 15 min · empty stomach</p></div></div>${list(Y," yoga asana tutorial")}<p class="note">Move slowly and never force a stretch. Stop if you feel sharp pain.</p>`}
+const T=[["n1",home],["n2",morning],["n3",yoga]];
+T.forEach(([id,f])=>{document.getElementById(id).onclick=()=>{T.forEach(([i])=>document.getElementById(i).className=i==id?"on":"");f()}});
+home();
+</script></body></html>
